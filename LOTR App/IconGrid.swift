@@ -8,11 +8,36 @@
 import SwiftUI
 
 struct IconGrid: View {
+    @Binding var selectedCurrency:Currency
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        LazyVGrid(columns:[GridItem(),GridItem(),GridItem()]) {
+            ForEach(Currency.allCases, id: \.self) {item in
+                if item == selectedCurrency {
+                    CurrencyIcon(
+                        currencyImage: item.image,
+                        currencyName: item.name
+                    )
+                    .shadow(color: .black, radius: 10)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(lineWidth: 3)
+                            .opacity(0.5)
+                    }
+                } else {
+                    CurrencyIcon(
+                        currencyImage: item.image,
+                        currencyName: item.name
+                    )
+                    .onTapGesture {
+                        selectedCurrency = item
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    IconGrid()
+    IconGrid(selectedCurrency: .constant(.silverPiece))
 }
